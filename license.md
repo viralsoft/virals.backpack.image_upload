@@ -1,6 +1,6 @@
 # MIT License
 
-Copyright (c) Nguyen Trung Thanh <thanhcttsp@gmail.com>
+Copyright (c) Viralsolf <ViralS-dev@viralsoft.vn>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
