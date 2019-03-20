@@ -5,21 +5,10 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use ViralsBackpack\BackPackImageUpload\Models\Image;
+use Illuminate\Support\Facades\Storage;
 
 trait HasImages
 {
-
-    private $ImageClass;
-
-
-    public function getImageClass()
-    {
-        if (! isset($this->ImageClass)) {
-            $this->ImageClass = new Image();
-        }
-
-        return $this->ImageClass;
-    }
 
     /**
      * A model may have multiple images.
@@ -30,7 +19,13 @@ trait HasImages
         return $this->morphToMany(Image::class, 'model','model_has_images','model_id','image_id');
     }
 
-    public function createImage($params)
+    /**
+     * created image
+     * $params: string or array
+     *
+     * return: all images for record
+     */
+    public function createImage($params=[])
     {
         if(!empty($params))
         {
@@ -52,43 +47,88 @@ trait HasImages
         return $this->images()->get();
     }
 
-    public function updateImage($params)
+    /**
+     * updated image
+     * $params: string or array
+     *
+     * return: all images for record
+     */
+
+    public function updateImage($params =[])
     {
-        $this->removeImage();
+        if($params)
+        {
+            $this->removeURLImage();
+            $image = $this->createImage($params);
 
-        $image = $this->createImage($params);
+            return $image;
+        }
 
-        return $image;
-    }
-
-    public function deleteImage()
-    {
-        $this->removeImage();
+        return null;
     }
 
     /**
-     * Revoke the given role from the model.
+     * deleted image
+     * $params: string or array
      *
-     * @param string|\Spatie\Permission\Contracts\Role $role
+     * return: true or false
      */
-    public function removeImage()
+    public function deleteImages($url=[])
     {
-        $image = $this->images();
-        Image::whereIn('id', $image->pluck('id'))->delete();
-        $image->detach();
+        if(!empty($url))
+        {
+            $convertURL = [];
+            if(is_array($url))
+            {
+                foreach($url as $link)
+                {
+                    array_push($url,'public/'.$link);
+                }
+            }
+            else
+            {
+                $convertURL = 'public/'.$url;
 
-        return $this->load('images');
+            }
+            Storage::delete($convertURL);
+
+            return true;
+        }
+
+        return false;
     }
 
     /**
-     * Remove all current roles and set the given ones.
      *
-     * @param array|\Spatie\Permission\Contracts\Role|string ...$roles
+     * remove image and relationship image
      *
-     * @return $this
      */
-    public function syncImages($images)
+    private function removeURLImage()
     {
-        return $this->images()->sync($images);
+        $images = $this->images();
+        if($images->get()->isNotEmpty()){
+            Image::whereIn('id', $images->pluck('id'))->delete();
+            $images->detach();
+
+            return $this->load('images');
+
+        }
+        return null;
     }
+
+    /**
+     *
+     * add image url and add relationship image
+     *
+     **/
+    public function syncImages($images = [])
+    {
+        if(!empty($images))
+        {
+            return $this->images()->sync($images);
+        }
+
+        return false;
+    }
+
 }

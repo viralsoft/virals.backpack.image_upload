@@ -158,11 +158,43 @@ $this->crud->addField([
 ```
 Package support upload image and pick uploaded image in server
 
-Function provide: 
-```php
+Function provide:
 
+Include traits in model 
+
+```php
+use ViralsBackpack\BackPackImageUpload\Traits\HasImages;
+
+class Test extends Model
+{
+    use HasImages;
+    ...
 
 ```
+
+Initialize the model
+
+```php
+$model = Test::find($id);
+```
+
+Create Image
+
+```php
+$model->createImage($params);
+```
+
+Update Image  
+
+```php
+$model->updateImage($params);
+```
+Delete Image:(delete image file and record)   
+
+```php
+$model->updateImage($params);
+```
+$param: array($link1, $link2) or string url image
 ## Change log
 
 Please see the [changelog](changelog.md) for more information on what has changed recently.
