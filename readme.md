@@ -194,7 +194,7 @@ Delete Image:(delete image file and record)
 ```php
 $model->updateImage($params);
 ```
-$param: array($link1, $link2) or string url image
+$params: array($link1, $link2) or string url image
 ## Change log
 
 Please see the [changelog](changelog.md) for more information on what has changed recently.
