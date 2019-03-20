@@ -5,6 +5,10 @@
     if (!$multiple && is_array($value)) {
         $value = array_first($value);
     }
+
+    if ($value instanceof Illuminate\Database\Eloquent\Collection) {
+        $value = $value->pluck('url')->toArray();
+    }
     $old_images = $field['old_images'] ?? [];
 @endphp
 
@@ -14,7 +18,7 @@
     <div class="panel panel-primary">
         <div class="panel-heading">Images</div>
         <div class="panel-body" id="image_box_{{ $field['name'] }}">
-            @if(count($old_images))
+            @if(count((array)$value))
             @else
                 No images
             @endif
@@ -123,8 +127,6 @@
             var template = document.getElementById('browse_multiple_template_{{ $field['name'] }}').innerHTML;
             var imgTemplate = document.getElementById("image_box_multiple_template_{{ $field['name'] }}").innerHTML;
             var oldValue = {!! json_encode((array)$value) !!};
-
-
 
             var setItemImages = function(path, browse_multiple_box_element) {
                 var remove_item = Math.random().toString(36).substring(10);
