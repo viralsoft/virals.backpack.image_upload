@@ -22,22 +22,22 @@
     </div>
     <div class="panel panel-default" style="padding: 5px">
         @include('crud::inc.field_translatable_icon')
-        @if ($multiple)
-            @foreach((array)$value as $v)
-                @if ($v)
-                    <div class="input-group input-group-sm">
-                        <input type="text" name="{{ $field['name'] }}[]" value="{{ $v }}" @include('crud::inc.field_attributes') readonly>
-                        <div class="input-group-btn">
-                            <button type="button" class="browse_{{ $field['name'] }} remove btn btn-default">
-                                <i class="fa fa-trash"></i>
-                            </button>
-                        </div>
-                    </div>
-                @endif
-            @endforeach
-        @else
-            <input type="text" name="{{ $field['name'] }}" value="{{ $value }}" @include('crud::inc.field_attributes') readonly>
-        @endif
+        {{--@if ($multiple)--}}
+        {{--@foreach((array)$value as $v)--}}
+        {{--@if ($v)--}}
+        {{--<div class="input-group input-group-sm">--}}
+        {{--<input type="text" name="{{ $field['name'] }}[]" value="{{ $v }}" @include('crud::inc.field_attributes') readonly>--}}
+        {{--<div class="input-group-btn">--}}
+        {{--<button type="button" class="browse_{{ $field['name'] }} remove btn btn-default">--}}
+        {{--<i class="fa fa-trash"></i>--}}
+        {{--</button>--}}
+        {{--</div>--}}
+        {{--</div>--}}
+        {{--@endif--}}
+        {{--@endforeach--}}
+        {{--@else--}}
+        {{--<input type="text" name="{{ $field['name'] }}" value="{{ $value }}" @include('crud::inc.field_attributes') readonly>--}}
+        {{--@endif--}}
 
         <div class="btn-group browse_multiple_box_{{ $field['name'] }}" role="group" aria-label="..." style="margin-top: 3px; width: 100%;">
             <button type="button" class="browse_{{ $field['name'] }} popup btn btn-default">
@@ -122,11 +122,14 @@
         $(function () {
             var template = document.getElementById('browse_multiple_template_{{ $field['name'] }}').innerHTML;
             var imgTemplate = document.getElementById("image_box_multiple_template_{{ $field['name'] }}").innerHTML;
+            var oldValue = {!! json_encode((array)$value) !!};
+
+
 
             var setItemImages = function(path, browse_multiple_box_element) {
                 var remove_item = Math.random().toString(36).substring(10);
-                var ele = browse_multiple_box_element  === null ? $(".popup.browse_{{ $field['name'] }}") : browse_multiple_box_element
-                path = 'storage/' + path
+                var ele = browse_multiple_box_element  == null ? $(".popup.browse_{{ $field['name'] }}") : browse_multiple_box_element
+                path = path.includes('storage/') ? path : 'storage/' + path
                 var input = $(template);
                 input.find('input').val(path);
                 input.find("button.remove.browse_{{ $field['name'] }}").attr('remove_item', remove_item);
@@ -140,6 +143,11 @@
                 image.find("button.remove.browse_{{ $field['name'] }}").attr('remove_item', remove_item);
                 image.attr('remove_item', remove_item)
                 $("#image_box_{{ $field['name'] }}").before(image)
+            }
+
+            for (i = 0; i < oldValue.length; i++) {
+                console.log(encodeURI(oldValue[i]))
+                setItemImages(oldValue[i])
             }
 
             $(document).on('click', '.popup.browse_{{ $field['name'] }}', function (event) {
