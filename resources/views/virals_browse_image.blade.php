@@ -242,7 +242,7 @@
                     href: div,
                     inline: true,
                     width: '80%',
-                    height: '80%'
+                    height: '100%'
                 });
 
                 elfinder.bind('sync', function(event) {
