@@ -31,7 +31,18 @@ class BackPackImageUploadServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/backpackimageupload.php', 'backpackimageupload');
+        $config = $this->app['config']->get('elfinder', []);
+        if (file_exists(config_path('backpackimageupload.php'))) {
+            $configBackpack = $this->app['config']->get('backpackimageupload', []);
+        } else {
+            $configBackpack = require __DIR__.'/../config/backpackimageupload.php';
+        }
+        $this->app['config']->set('elfinder', array_merge($config, $configBackpack['elfinder']));
+
+        $folderStorage = str_replace("storage","app/public", $this->app['config']->get('elfinder', [])['dir'][0]);
+        if (!file_exists(storage_path($folderStorage))) {
+            mkdir(storage_path($folderStorage), 0777, true);
+        }
 
         // Register the service the package provides.
         $this->app->singleton('backpackimageupload', function ($app) {

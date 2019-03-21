@@ -9,7 +9,7 @@ return [
             ),
             'uploadAllow'   => array('image'), // Mimetype `image` and `text/plain` allowed to upload
             'uploadOrder'   => array('allow', 'deny'),      // allowed Mimetype `image` and `text/plain` only
-            'uploadMaxSize' => '1M'
+            'uploadMaxSize' => '10M'
         ),
         'dir' => ['storage/images']
     ]
