@@ -1,6 +1,6 @@
 {
     "name": "viralsbackpack/backpackimageupload",
-    "description": ":description",
+    "description": "Manager images in laravel backpack",
     "license": "license",
     "authors": [
         {
