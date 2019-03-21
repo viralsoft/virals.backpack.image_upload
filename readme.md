@@ -160,18 +160,6 @@ Package support upload image and pick uploaded image in server
 
 Function provide:
 
-Include traits in model 
-
-```php
-use ViralsBackpack\BackPackImageUpload\Traits\HasImages;
-
-class Test extends Model
-{
-    use HasImages;
-    ...
-
-```
-
 Initialize the model
 
 ```php
