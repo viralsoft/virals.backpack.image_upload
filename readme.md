@@ -165,6 +165,12 @@ Initialize the model
 ```php
 $model = Test::find($id);
 ```
+Get all Image for model
+
+```php
+$model->images;
+```
+
 
 Create Image
 
